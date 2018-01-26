@@ -391,19 +391,17 @@ class main_listener implements EventSubscriberInterface
 
 	public function search_get_topic_data($event)
 	{
-		$sql_select = $event['sql_select'];
-		$sql_from = $event['sql_from'];
-		$sql_where = $event['sql_where'];
-
 		// Allow users to search topics a user has answered
 		$filter = $this->request->variable('filter', '');
 		$author_id = $this->request->variable('author_id', 0);
 
 		if ($filter == 'topicsanswered')
 		{
-			$sql_select .= ', p.post_id, p.poster_id';
-			$sql_from .= ' LEFT JOIN ' . POSTS_TABLE . ' p ON (p.post_id = t.answer_post_id)';
-			$sql_where .= ' AND p.poster_id = ' . (int) $author_id;
+			$sql_select = 'p.post_id, p.poster_id, t.topic_id, t.answer_post_id, t.topic_title,
+				t.topic_first_poster_name, t.topic_last_poster_name, t.topic_time,
+				t.topic_last_post_time, t.topic_views, t.topic_posts_approved';
+			$sql_from = POSTS_TABLE . ' p, ' .TOPICS_TABLE . ' t';
+			$sql_where = '(p.post_id = t.answer_post_id) AND p.poster_id = ' . (int) $author_id;
 
 			// Set $total_match_count to 0 - DO NOT modify
 			// the $event['total_match_count'] variable - it
