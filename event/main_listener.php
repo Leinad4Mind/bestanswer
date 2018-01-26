@@ -397,10 +397,10 @@ class main_listener implements EventSubscriberInterface
 
 		if ($filter == 'topicsanswered')
 		{
-			$sql_select = 'p.post_id, p.poster_id, t.topic_id, t.answer_post_id, t.topic_title,
-				t.topic_first_poster_name, t.topic_last_poster_name, t.topic_time,
-				t.topic_last_post_time, t.topic_views, t.topic_posts_approved';
-			$sql_from = POSTS_TABLE . ' p, ' .TOPICS_TABLE . ' t';
+			$sql_select = 'f.forum_id, f.forum_name, p.post_id, p.poster_id,
+				t.topic_id, t.topic_attachment, t.answer_post_id, t.topic_title, t.topic_first_poster_name, t.topic_last_poster_name,
+				t.topic_time, t.topic_last_post_time, t.topic_views, t.topic_visibility, t.topic_posts_approved';
+			$sql_from = FORUMS_TABLE . ' f, '. POSTS_TABLE . ' p, ' . TOPICS_TABLE . ' t';
 			$sql_where = '(p.post_id = t.answer_post_id) AND p.poster_id = ' . (int) $author_id;
 
 			// Set $total_match_count to 0 - DO NOT modify
